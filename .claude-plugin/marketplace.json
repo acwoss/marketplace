@@ -1,0 +1,17 @@
+{
+  "name": "marketplace",
+  "description": "Marketplace pessoal de plugins para Claude Code",
+  "owner": {
+    "name": "Anderson Carlos Woss"
+  },
+  "plugins": [
+    {
+      "name": "memory-mcp",
+      "description": "Local, 100%-offline persistent memory MCP server for AI coding agents, backed by ChromaDB.",
+      "source": {
+        "source": "github",
+        "repo": "acwoss/memory-mcp"
+      }
+    }
+  ]
+}
