@@ -1,4 +1,4 @@
-# marketplace
+# acwoss
 
 Marketplace pessoal de plugins para o Claude Code, seguindo o formato
 descrito em https://code.claude.com/docs/en/plugin-marketplaces.
@@ -26,7 +26,7 @@ Adicionar este marketplace:
 Instalar um plugin dele:
 
 ```shell
-/plugin install memory-mcp@marketplace
+/plugin install memory-mcp@acwoss
 /reload-plugins
 ```
 
