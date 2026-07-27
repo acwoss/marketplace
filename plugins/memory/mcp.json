@@ -2,9 +2,11 @@
   "mcpServers": {
     "memory": {
       "command": "node",
-      "args": ["server/dist/index.cjs"],
+      "args": [
+        "${userHome}/.cursor/plugins/local/memory/server/dist/index.cjs"
+      ],
       "env": {
-        "MEMORY_VAULT_PATH": "${MEMORY_VAULT_PATH}"
+        "MEMORY_VAULT_PATH": "${env:MEMORY_VAULT_PATH}"
       }
     }
   }
