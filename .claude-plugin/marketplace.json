@@ -1,8 +1,11 @@
 {
   "name": "acwoss",
-  "description": "Marketplace pessoal de plugins para Claude Code",
+  "description": "Marketplace pessoal de plugins para Claude Code e Cursor",
   "owner": {
     "name": "Anderson Carlos Woss"
+  },
+  "metadata": {
+    "pluginRoot": "./plugins"
   },
   "plugins": [
     {

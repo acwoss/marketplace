@@ -1,38 +1,66 @@
 # acwoss
 
-Marketplace pessoal de plugins para o Claude Code, seguindo o formato
-descrito em https://code.claude.com/docs/en/plugin-marketplaces.
+Marketplace pessoal de plugins para **Claude Code** e **Cursor**.
 
-Todos os plugins listados aqui são hospedados em seus próprios repositórios
-— este repositório contém apenas o catálogo (`.claude-plugin/marketplace.json`),
-nenhum código de plugin é versionado aqui.
+- Catálogo Claude: [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
+- Catálogo Cursor: [`.cursor-plugin/marketplace.json`](.cursor-plugin/marketplace.json)
+- Plugins locais: pasta [`plugins/`](plugins/)
+
+## Modelos de distribuição
+
+| Tipo | Onde vive | Claude | Cursor |
+|------|-----------|--------|--------|
+| Remoto | Repositório externo (ex.: `memory-mcp`) | `source` GitHub | — |
+| Local | `plugins/<nome>/` neste repo | path relativo | path relativo |
+
+Plugins novos devem ser locais neste repositório. O `memory-mcp` permanece remoto
+e disponível apenas no marketplace Claude.
 
 ## Plugins
 
+### Remotos (Claude)
+
 - **memory-mcp** — Local, 100%-offline persistent memory MCP server for AI
   coding agents, backed by ChromaDB.
-  Fonte: [acwoss/memory-mcp](https://github.com/acwoss/memory-mcp) (branch
-  padrão, sem versão fixada — a versão efetiva é sempre a declarada no
-  `plugin.json` daquele repositório).
+  Fonte: [acwoss/memory-mcp](https://github.com/acwoss/memory-mcp)
+
+### Locais
+
+Nenhum ainda. Novos plugins entram em `plugins/<nome>/` — veja
+[`plugins/README.md`](plugins/README.md).
 
 ## Como usar
 
-Adicionar este marketplace:
+### Claude Code
 
 ```shell
 /plugin marketplace add acwoss/marketplace
-```
-
-Instalar um plugin dele:
-
-```shell
 /plugin install memory-mcp@acwoss
 /reload-plugins
 ```
 
-## Adicionar novos plugins
+Para testar localmente a partir deste clone:
 
-Cada novo plugin é uma entrada em `plugins[]` no `marketplace.json`, com
-`source` apontando para o repositório externo onde aquele plugin vive
-(`github`, `url`, ou `git-subdir`, conforme o caso). Nenhum plugin deve ter
-seu código vendorizado dentro deste repositório.
+```shell
+/plugin marketplace add ./caminho/para/marketplace
+```
+
+### Cursor
+
+1. Submeta ou aponte o repositório como marketplace de plugins Cursor
+   (veja [Plugins reference](https://cursor.com/docs/reference/plugins.md)).
+2. Plugins locais listados em `.cursor-plugin/marketplace.json` são instaláveis
+   a partir deste repo.
+3. Para desenvolvimento rápido de um plugin isolado, copie ou faça symlink de
+   `plugins/<nome>` para `~/.cursor/plugins/local/<nome>` e rode
+   **Developer: Reload Window**.
+
+## Adicionar um plugin local
+
+1. Criar `plugins/<nome>/` com `.claude-plugin/plugin.json` e
+   `.cursor-plugin/plugin.json`.
+2. Registrar em ambos os `marketplace.json` com `"source": "<nome>"`
+   (os `pluginRoot` já apontam para `plugins/`).
+3. Incluir componentes (`skills/`, `rules/`, `agents/`, `commands/`, `hooks/`,
+   `mcp.json`) conforme o caso.
+4. Atualizar a seção **Plugins** deste README.

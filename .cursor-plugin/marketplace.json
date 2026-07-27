@@ -1,0 +1,11 @@
+{
+  "name": "acwoss",
+  "owner": {
+    "name": "Anderson Carlos Woss"
+  },
+  "metadata": {
+    "description": "Marketplace pessoal de plugins para Cursor",
+    "pluginRoot": "plugins"
+  },
+  "plugins": []
+}
