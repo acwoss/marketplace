@@ -7,5 +7,11 @@
     "description": "Marketplace pessoal de plugins para Cursor",
     "pluginRoot": "plugins"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "superpowers",
+      "source": "superpowers",
+      "description": "Core skills library: TDD, debugging, collaboration patterns, and proven techniques"
+    }
+  ]
 }

@@ -26,8 +26,9 @@ e disponível apenas no marketplace Claude.
 
 ### Locais
 
-Nenhum ainda. Novos plugins entram em `plugins/<nome>/` — veja
-[`plugins/README.md`](plugins/README.md).
+- **superpowers** — Biblioteca de skills (TDD, debugging, colaboração e
+  workflows). Baseado em [obra/superpowers](https://github.com/obra/superpowers).
+  Código em [`plugins/superpowers/`](plugins/superpowers/).
 
 ## Como usar
 
@@ -36,6 +37,7 @@ Nenhum ainda. Novos plugins entram em `plugins/<nome>/` — veja
 ```shell
 /plugin marketplace add acwoss/marketplace
 /plugin install memory-mcp@acwoss
+/plugin install superpowers@acwoss
 /reload-plugins
 ```
 
