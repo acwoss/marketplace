@@ -2,7 +2,7 @@
   "mcpServers": {
     "memory": {
       "command": "node",
-      "args": ["run.mjs"],
+      "args": ["server/dist/index.cjs"],
       "env": {
         "MEMORY_VAULT_PATH": "${MEMORY_VAULT_PATH}"
       }
