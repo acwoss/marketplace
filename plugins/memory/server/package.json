@@ -5,12 +5,12 @@
   "type": "module",
   "description": "Local filesystem MCP server for markdown memory vault",
   "bin": {
-    "memory-mcp-server": "./dist/index.js"
+    "memory-mcp-server": "./dist/index.cjs"
   },
   "scripts": {
-    "build": "tsc --noEmit && esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js --banner:js=\"#!/usr/bin/env node\"",
+    "build": "tsc --noEmit && esbuild src/index.ts --bundle --platform=node --format=cjs --outfile=dist/index.cjs",
     "typecheck": "tsc --noEmit",
-    "start": "node dist/index.js",
+    "start": "node dist/index.cjs",
     "smoke": "node --import tsx src/smoke.ts"
   },
   "engines": {

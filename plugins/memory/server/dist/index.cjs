@@ -1,18 +1,11 @@
-#!/usr/bin/env node
-#!/usr/bin/env node
+"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
-  if (typeof require !== "undefined") return require.apply(this, arguments);
-  throw Error('Dynamic require of "' + x + '" is not supported');
-});
-var __commonJS = (cb, mod) => function __require2() {
+var __commonJS = (cb, mod) => function __require() {
   try {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   } catch (e) {
@@ -7927,7 +7920,7 @@ var require_binary = __commonJS({
     "use strict";
     var NodeBuffer;
     try {
-      _require = __require;
+      _require = require;
       NodeBuffer = _require("buffer").Buffer;
     } catch (__) {
     }
@@ -8216,7 +8209,7 @@ var require_function = __commonJS({
     "use strict";
     var esprima;
     try {
-      _require = __require;
+      _require = require;
       esprima = _require("esprima");
     } catch (_) {
       if (typeof window !== "undefined") esprima = window.esprima;
@@ -10278,7 +10271,7 @@ var require_parse = __commonJS({
 var require_gray_matter = __commonJS({
   "node_modules/gray-matter/index.js"(exports2, module2) {
     "use strict";
-    var fs3 = __require("fs");
+    var fs3 = require("fs");
     var sections = require_section_matter();
     var defaults = require_defaults2();
     var stringify = require_stringify();
@@ -24511,7 +24504,7 @@ var EMPTY_COMPLETION_RESULT = {
 };
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
-import process2 from "node:process";
+var import_node_process = __toESM(require("node:process"), 1);
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/shared/stdio.js
 var ReadBuffer = class {
@@ -24543,7 +24536,7 @@ function serializeMessage(message) {
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
 var StdioServerTransport = class {
-  constructor(_stdin = process2.stdin, _stdout = process2.stdout) {
+  constructor(_stdin = import_node_process.default.stdin, _stdout = import_node_process.default.stdout) {
     this._stdin = _stdin;
     this._stdout = _stdout;
     this._readBuffer = new ReadBuffer();
@@ -24603,13 +24596,13 @@ var StdioServerTransport = class {
 };
 
 // src/notes.ts
+var import_node_fs2 = __toESM(require("node:fs"), 1);
+var import_node_path2 = __toESM(require("node:path"), 1);
 var import_gray_matter = __toESM(require_gray_matter(), 1);
-import fs2 from "node:fs";
-import path2 from "node:path";
 
 // src/vault.ts
-import fs from "node:fs";
-import path from "node:path";
+var import_node_fs = __toESM(require("node:fs"), 1);
+var import_node_path = __toESM(require("node:path"), 1);
 var VaultError = class extends Error {
   constructor(message) {
     super(message);
@@ -24623,16 +24616,16 @@ function getVaultPath() {
       "MEMORY_VAULT_PATH is not set. Configure the plugin variable or env and retry."
     );
   }
-  return path.resolve(raw);
+  return import_node_path.default.resolve(raw);
 }
 function ensureVaultInitialized(vaultPath) {
-  const projectsDir = path.join(vaultPath, "projects");
-  const templatesDir = path.join(vaultPath, "_templates");
-  fs.mkdirSync(projectsDir, { recursive: true });
-  fs.mkdirSync(templatesDir, { recursive: true });
-  const readmePath = path.join(vaultPath, "README.md");
-  if (!fs.existsSync(readmePath)) {
-    fs.writeFileSync(
+  const projectsDir = import_node_path.default.join(vaultPath, "projects");
+  const templatesDir = import_node_path.default.join(vaultPath, "_templates");
+  import_node_fs.default.mkdirSync(projectsDir, { recursive: true });
+  import_node_fs.default.mkdirSync(templatesDir, { recursive: true });
+  const readmePath = import_node_path.default.join(vaultPath, "README.md");
+  if (!import_node_fs.default.existsSync(readmePath)) {
+    import_node_fs.default.writeFileSync(
       readmePath,
       [
         "# AI Memory Vault",
@@ -24647,9 +24640,9 @@ function ensureVaultInitialized(vaultPath) {
       "utf8"
     );
   }
-  const templatePath = path.join(templatesDir, "fact.md");
-  if (!fs.existsSync(templatePath)) {
-    fs.writeFileSync(
+  const templatePath = import_node_path.default.join(templatesDir, "fact.md");
+  if (!import_node_fs.default.existsSync(templatePath)) {
+    import_node_fs.default.writeFileSync(
       templatePath,
       [
         "---",
@@ -24669,31 +24662,31 @@ function ensureVaultInitialized(vaultPath) {
   }
 }
 function projectDir(vaultPath, project) {
-  return path.join(vaultPath, "projects", project);
+  return import_node_path.default.join(vaultPath, "projects", project);
 }
 function factsDir(vaultPath, project) {
-  return path.join(projectDir(vaultPath, project), "facts");
+  return import_node_path.default.join(projectDir(vaultPath, project), "facts");
 }
 function ensureProject(vaultPath, project) {
   ensureVaultInitialized(vaultPath);
-  fs.mkdirSync(factsDir(vaultPath, project), { recursive: true });
+  import_node_fs.default.mkdirSync(factsDir(vaultPath, project), { recursive: true });
 }
 function slugifyId(input) {
   return input.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 120);
 }
 function inferProjectFromCwd(cwd = process.cwd()) {
-  const base = path.basename(cwd).trim();
+  const base = import_node_path.default.basename(cwd).trim();
   if (!base || base === "." || base === "/" || base.includes(":")) {
     return void 0;
   }
   return slugifyId(base) || void 0;
 }
 function listProjectSlugs(vaultPath) {
-  const projectsRoot = path.join(vaultPath, "projects");
-  if (!fs.existsSync(projectsRoot)) {
+  const projectsRoot = import_node_path.default.join(vaultPath, "projects");
+  if (!import_node_fs.default.existsSync(projectsRoot)) {
     return [];
   }
-  return fs.readdirSync(projectsRoot, { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
+  return import_node_fs.default.readdirSync(projectsRoot, { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
 }
 
 // src/notes.ts
@@ -24732,15 +24725,15 @@ function normalizeSources(value) {
   return sources.length > 0 ? sources : void 0;
 }
 function parseNote(absolutePath, vaultPath) {
-  const raw = fs2.readFileSync(absolutePath, "utf8");
+  const raw = import_node_fs2.default.readFileSync(absolutePath, "utf8");
   const parsed = (0, import_gray_matter.default)(raw);
   const data = parsed.data;
-  const id = typeof data.id === "string" && data.id.trim() ? slugifyId(data.id) : slugifyId(path2.basename(absolutePath, ".md"));
+  const id = typeof data.id === "string" && data.id.trim() ? slugifyId(data.id) : slugifyId(import_node_path2.default.basename(absolutePath, ".md"));
   if (!id) {
     return null;
   }
   const title = typeof data.title === "string" && data.title.trim() ? data.title.trim() : id;
-  const project = typeof data.project === "string" && data.project.trim() ? slugifyId(data.project) : slugifyId(path2.basename(path2.dirname(path2.dirname(absolutePath))));
+  const project = typeof data.project === "string" && data.project.trim() ? slugifyId(data.project) : slugifyId(import_node_path2.default.basename(import_node_path2.default.dirname(import_node_path2.default.dirname(absolutePath))));
   const jira = typeof data.jira === "string" && data.jira.trim() ? data.jira.trim() : void 0;
   const updated = typeof data.updated === "string" && data.updated.trim() ? data.updated.trim() : today();
   const frontmatter = {
@@ -24762,22 +24755,22 @@ function parseNote(absolutePath, vaultPath) {
     frontmatter,
     body: parsed.content.replace(/^\n+/, ""),
     absolutePath,
-    relativePath: path2.relative(vaultPath, absolutePath).replace(/\\/g, "/")
+    relativePath: import_node_path2.default.relative(vaultPath, absolutePath).replace(/\\/g, "/")
   };
 }
 function listNotes(vaultPath, filters = {}) {
-  const projects = filters.project ? [slugifyId(filters.project)] : fs2.existsSync(path2.join(vaultPath, "projects")) ? fs2.readdirSync(path2.join(vaultPath, "projects"), { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name) : [];
+  const projects = filters.project ? [slugifyId(filters.project)] : import_node_fs2.default.existsSync(import_node_path2.default.join(vaultPath, "projects")) ? import_node_fs2.default.readdirSync(import_node_path2.default.join(vaultPath, "projects"), { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name) : [];
   const notes = [];
   for (const project of projects) {
     const dir = factsDir(vaultPath, project);
-    if (!fs2.existsSync(dir)) {
+    if (!import_node_fs2.default.existsSync(dir)) {
       continue;
     }
-    for (const file of fs2.readdirSync(dir)) {
+    for (const file of import_node_fs2.default.readdirSync(dir)) {
       if (!file.endsWith(".md")) {
         continue;
       }
-      const absolutePath = path2.join(dir, file);
+      const absolutePath = import_node_path2.default.join(dir, file);
       const note = parseNote(absolutePath, vaultPath);
       if (!note) {
         continue;
@@ -24802,8 +24795,8 @@ function listNotes(vaultPath, filters = {}) {
 }
 function getNote(vaultPath, options2) {
   if (options2.path) {
-    const absolutePath = path2.isAbsolute(options2.path) ? options2.path : path2.join(vaultPath, options2.path);
-    if (!fs2.existsSync(absolutePath)) {
+    const absolutePath = import_node_path2.default.isAbsolute(options2.path) ? options2.path : import_node_path2.default.join(vaultPath, options2.path);
+    if (!import_node_fs2.default.existsSync(absolutePath)) {
       throw new VaultError(`Note not found at path: ${options2.path}`);
     }
     const note = parseNote(absolutePath, vaultPath);
@@ -24885,8 +24878,8 @@ function regenerateIndex(vaultPath, project) {
     }
     lines.push("");
   }
-  fs2.writeFileSync(
-    path2.join(projectDir(vaultPath, project), "index.md"),
+  import_node_fs2.default.writeFileSync(
+    import_node_path2.default.join(projectDir(vaultPath, project), "index.md"),
     lines.join("\n"),
     "utf8"
   );
@@ -24905,9 +24898,9 @@ function upsertNote(vaultPath, input) {
     throw new VaultError("Could not derive a valid note id.");
   }
   ensureProject(vaultPath, project);
-  const absolutePath = path2.join(factsDir(vaultPath, project), `${id}.md`);
+  const absolutePath = import_node_path2.default.join(factsDir(vaultPath, project), `${id}.md`);
   let existing = null;
-  if (fs2.existsSync(absolutePath)) {
+  if (import_node_fs2.default.existsSync(absolutePath)) {
     existing = parseNote(absolutePath, vaultPath);
   }
   const frontmatter = {
@@ -24927,7 +24920,7 @@ function upsertNote(vaultPath, input) {
     frontmatter.sources = sources;
   }
   const body = input.body?.trim() ? input.body.trim() + "\n" : "";
-  fs2.writeFileSync(absolutePath, serializeNote(frontmatter, body), "utf8");
+  import_node_fs2.default.writeFileSync(absolutePath, serializeNote(frontmatter, body), "utf8");
   regenerateIndex(vaultPath, project);
   return getNote(vaultPath, { id, project });
 }

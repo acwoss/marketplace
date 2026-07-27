@@ -18,7 +18,7 @@ Memória permanente em **markdown** para agentes de IA: fatos estáveis do proje
 ## Configuração
 
 1. Defina `MEMORY_VAULT_PATH` (path absoluto do vault).
-2. Build do server (gera `server/dist/index.js` empacotado; necessário após clonar se o bundle não estiver presente):
+2. Build do server (gera `server/dist/index.cjs` empacotado; necessário após clonar se o bundle não estiver presente):
 
 ```shell
 cd plugins/memory/server
