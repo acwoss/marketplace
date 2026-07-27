@@ -78,7 +78,6 @@ The `using-superpowers` bootstrap is injected into every session, so its size is
 
 ### Codex Fixes
 
-- **Version display in the brainstorm companion** — packaged Codex plugins ship without a root `package.json`, so the visual companion reported its version as "unknown". `readSuperpowersVersion()` now falls back to `.codex-plugin/plugin.json` when `package.json` is absent.
 - **Cleaner Codex plugin sync** — the sync-to-codex script now excludes `.gitmodules` and `.pre-commit-config.yaml`, keeping repo metadata out of the packaged Codex plugin.
 
 ## v6.0.0 (2026-06-16)
@@ -86,8 +85,6 @@ The `using-superpowers` bootstrap is injected into every session, so its size is
 Superpowers 6.0 is a big release. The headline is a rewrite of how `subagent-driven-development` reviews each task — cheaper, stricter, and harder to game. 
 
 While these numbers won't hold on every harness and for every workload, in our evals, Claude Code and Codex produce similar high-quality results roughly twice as fast and while spending almost 50% fewer tokens.
-
-It also adds three new harnesses (Kimi Code, Pi, and Antigravity), gives the brainstorming visual companion a better security model, and rewrites a number of skills' tool calls to be significantly more vendor-neutral.
 
 ### Visible Changes
 
@@ -122,18 +119,6 @@ Plans now carry the structure the controller and reviewers used to re-derive on 
 - **A Global Constraints block** lists the rules that bind every task — version floors, dependency limits, naming and copy, exact values — copied in verbatim, so they actually reach the implementers and reviewers downstream.
 - **A per-task Interfaces block** names exactly what each task consumes and produces, so an implementer who sees only its own task still knows its neighbors' contracts.
 - **Right-sizing guidance** keeps a task at the size that earns its own test cycle and a reviewer's pass, folding setup, config, and docs into the task that needs them. In testing, a plan written this way needed one round of fixes where the control needed two to four — and the control shipped a real bug.
-
-### Brainstorming Visual Companion
-
-The visual companion is a small web server the agent opens alongside the conversation. It had no authentication at all, so on a shared or remote machine anyone who could reach the port could read your brainstorm — or inject events the agent treats as your input. This release gives it a real security model and makes it survive restarts and dropped connections.
-
-- **A per-session key now guards everything.** The agent's URL carries a one-time key, the browser tucks it into a tab-scoped cookie, and every request and WebSocket connection has to present it. This closes the door to stray local tabs and routable remote hosts alike, including the DNS-rebinding case an origin allowlist can't catch. (Closes #1014)
-- **The file server stays in its sandbox.** It refuses symlinks, dotfiles, and any path that climbs out of the content directory, ignores macOS resource-fork files, and sends the usual no-store and deny-framing headers. Files that hold the session key are written owner-only.
-- **The companion is offered only when it helps.** The skill raises it the first time a question would read better shown than told, as its own message, and lets a decline stand. Accepting opens your browser to the first screen. (Closes #755)
-- **It survives restarts and flaky connections.** Given a project directory, the server keeps the same port and key across restarts, so an open tab simply reconnects. The page reconnects on its own, shows a live status pill, and raises a "paused" overlay while the server is down.
-- **Longer idle life, safer shutdown.** The idle timeout went from 30 minutes to 4 hours, and `stop-server.sh` now confirms it owns the right process before signaling, so it never kills an unrelated `node` after a reboot. (#1703)
-- **Windows launch hardening** — consolidated shell detection, and Windows now relies on the idle timeout for shutdown, since Node can't track POSIX process ownership across MSYS2.
-
 
 ### Existing Harness Updates
 
@@ -289,13 +274,8 @@ The subagent review loop (dispatching a fresh agent to review plans/specs) doubl
 - **writing-plans** — added explicit "No Placeholders" section defining plan failures (TBD, vague descriptions, undefined references, "similar to Task N")
 - Self-review catches 3-5 real bugs per run in ~30s instead of ~25 min, with comparable defect rates to the subagent approach
 
-### Brainstorm Server
-
-- **Session directory restructured** — the brainstorm server session directory now contains two peer subdirectories: `content/` (HTML files served to the browser) and `state/` (events, server-info, pid, log). Previously, server state and user interaction data were stored alongside served content, making them accessible over HTTP. The `screen_dir` and `state_dir` paths are both included in the server-started JSON. (Reported by 吉田仁)
-
 ### Bug Fixes
 
-- **Owner-PID lifecycle fixes** — the brainstorm server's owner-PID monitoring had two bugs causing false shutdowns within 60 seconds: (1) EPERM from cross-user PIDs (Tailscale SSH, etc.) was treated as "process dead", and (2) on WSL the grandparent PID resolves to a short-lived subprocess that exits before the first lifecycle check. Fixed by treating EPERM as "alive" and validating the owner PID at startup — if it's already dead, monitoring is disabled and the server relies on the 30-minute idle timeout. This also removes the Windows/MSYS2-specific carve-out from `start-server.sh` since the server now handles it generically. (#879)
 - **writing-skills** — corrected false claim that SKILL.md frontmatter supports "only two fields"; now says "two required fields" and links to the agentskills.io specification for all supported fields (PR #882 by @arittr)
 
 ### Codex App Compatibility
@@ -308,9 +288,7 @@ The subagent review loop (dispatching a fresh agent to review plans/specs) doubl
 
 ### Bug Fixes
 
-- **Brainstorm server ESM fix** — renamed `server.js` → `server.cjs` so the brainstorming server starts correctly on Node.js 22+ where the root `package.json` `"type": "module"` caused `require()` to fail. (PR #784 by @sarbojitrana, fixes #774, #780, #783)
 - **Brainstorm owner-PID on Windows** — skip PID lifecycle monitoring on Windows/MSYS2 where the PID namespace is invisible to Node.js, preventing the server from self-terminating after 60 seconds. (#770, docs from PR #768 by @lucasyhzlu-debug)
-- **stop-server.sh reliability** — verify the server process actually died before reporting success. SIGTERM + 2s wait + SIGKILL fallback. (#723)
 
 ### Changed
 
@@ -332,11 +310,6 @@ Dramatically reduces token usage and speeds up spec and plan reviews by eliminat
 - **One-line plugin install** — OpenCode plugin now auto-registers the skills directory via a `config` hook. No symlinks or `skills.paths` config needed. Install is just adding one line to `opencode.json`. (PR #753)
 - **Added `package.json`** so OpenCode can install superpowers as an npm package from git.
 
-### Bug Fixes
-
-- **Verify server actually stopped** — `stop-server.sh` now confirms the process is dead before reporting success. SIGTERM + 2s wait + SIGKILL fallback. Reports failure if the process survives. (PR #751)
-- **Generic agent language** — brainstorm companion waiting page now says "the agent" instead of "Claude".
-
 ## v5.0.3 (2026-03-15)
 
 ### Cursor Support
@@ -349,27 +322,9 @@ Dramatically reduces token usage and speeds up spec and plan reviews by eliminat
 - **Bash 5.3+ hook hang** — replaced heredoc (`cat <<EOF`) with `printf` in `hooks/session-start`. Fixes indefinite hang on macOS with Homebrew bash 5.3+ caused by a bash regression with large variable expansion in heredocs. (#572, #571)
 - **POSIX-safe hook script** — replaced `${BASH_SOURCE[0]:-$0}` with `$0` in `hooks/session-start`. Fixes "Bad substitution" error on Ubuntu/Debian where `/bin/sh` is dash. (#553)
 - **Portable shebangs** — replaced `#!/bin/bash` with `#!/usr/bin/env bash` in all shell scripts. Fixes execution on NixOS, FreeBSD, and macOS with Homebrew bash where `/bin/bash` is outdated or missing. (#700)
-- **Brainstorm server on Windows** — auto-detect Windows/Git Bash (`OSTYPE=msys*`, `MSYSTEM`) and switch to foreground mode, fixing silent server failure caused by `nohup`/`disown` process reaping. (#737)
 - **Codex docs fix** — replaced deprecated `collab` flag with `multi_agent` in Codex documentation. (PR #749)
 
 ## v5.0.2 (2026-03-11)
-
-### Zero-Dependency Brainstorm Server
-
-**Removed all vendored node_modules — server.js is now fully self-contained**
-
-- Replaced Express/Chokidar/WebSocket dependencies with zero-dependency Node.js server using built-in `http`, `fs`, and `crypto` modules
-- Removed ~1,200 lines of vendored `node_modules/`, `package.json`, and `package-lock.json`
-- Custom WebSocket protocol implementation (RFC 6455 framing, ping/pong, proper close handshake)
-- Native `fs.watch()` file watching replaces Chokidar
-- Full test suite: HTTP serving, WebSocket protocol, file watching, and integration tests
-
-### Brainstorm Server Reliability
-
-- **Auto-exit after 30 minutes idle** — server shuts down when no clients are connected, preventing orphaned processes
-- **Owner process tracking** — server monitors the parent harness PID and exits when the owning session dies
-- **Liveness check** — skill verifies server is responsive before reusing an existing instance
-- **Encoding fix** — proper `<meta charset="utf-8">` on served HTML pages
 
 ### Subagent Context Isolation
 
@@ -377,15 +332,6 @@ Dramatically reduces token usage and speeds up spec and plan reviews by eliminat
 - Subagents receive only the context they need, preventing context window pollution
 
 ## v5.0.1 (2026-03-10)
-
-### Agentskills Compliance
-
-**Brainstorm-server moved into skill directory**
-
-- Moved `lib/brainstorm-server/` → `skills/brainstorming/scripts/` per the [agentskills.io](https://agentskills.io) specification
-- All `${CLAUDE_PLUGIN_ROOT}/lib/brainstorm-server/` references replaced with relative `scripts/` paths
-- Skills are now fully portable across platforms — no platform-specific env vars needed to locate scripts
-- `lib/` directory removed (was the last remaining content)
 
 ### New Features
 
@@ -399,17 +345,6 @@ Dramatically reduces token usage and speeds up spec and plan reviews by eliminat
 - Install instructions added to README
 
 ### Improvements
-
-**Multi-platform brainstorm server launch**
-
-- Per-platform launch instructions in visual-companion.md: Claude Code (default mode), Codex (auto-foreground via `CODEX_CI`), Gemini CLI (`--foreground` with `is_background`), and fallback for other environments
-- Server now writes startup JSON to `$SCREEN_DIR/.server-info` so agents can find the URL and port even when stdout is hidden by background execution
-
-**Brainstorm server dependencies bundled**
-
-- `node_modules` vendored into the repo so the brainstorm server works immediately on fresh plugin installs without requiring `npm` at runtime
-- Removed `fsevents` from bundled deps (macOS-only native binary; chokidar falls back gracefully without it)
-- Fallback auto-install via `npm install` if `node_modules` is missing
 
 **OpenCode tool mapping fix**
 
@@ -490,16 +425,6 @@ Removed the "execute 3 tasks then stop for review" pattern. Plans now execute co
 `/brainstorm`, `/write-plan`, and `/execute-plan` now show deprecation notices pointing users to the corresponding skills. Commands will be removed in the next major release.
 
 ### New Features
-
-**Visual brainstorming companion**
-
-Optional browser-based companion for brainstorming sessions. When a topic would benefit from visuals, the brainstorming skill offers to show mockups, diagrams, comparisons, and other content in a browser window alongside terminal conversation.
-
-- `lib/brainstorm-server/` — WebSocket server with browser helper library, session management scripts, and dark/light themed frame template ("Superpowers Brainstorming" with GitHub link)
-- `skills/brainstorming/visual-companion.md` — Progressive disclosure guide for server workflow, screen authoring, and feedback collection
-- Brainstorming skill adds a visual companion decision point to its process flow: after exploring project context, the skill evaluates whether upcoming questions involve visual content and offers the companion in its own message
-- Per-question decision: even after accepting, each question is evaluated for whether browser or terminal is more appropriate
-- Integration tests in `tests/brainstorm-server/`
 
 **Document review system**
 

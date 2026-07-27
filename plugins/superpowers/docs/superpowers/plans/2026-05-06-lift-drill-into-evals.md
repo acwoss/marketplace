@@ -1080,14 +1080,13 @@ Open `/Users/jesse/Documents/GitHub/superpowers/superpowers/docs/testing.md` and
 
 Superpowers has two distinct kinds of tests, each in its own directory:
 
-- **`tests/`** — does the plugin's non-LLM code work? Bash + node + python integration tests for brainstorm-server JS, OpenCode plugin loading, codex-plugin sync, and analysis utilities.
+- **`tests/`** — does the plugin's non-LLM code work? Bash + node + python integration tests for OpenCode plugin loading, codex-plugin sync, and analysis utilities.
 - **`evals/`** — do agents behave correctly on real LLM sessions? Python harness driving real tmux sessions of Claude Code / Codex / Gemini CLI / Copilot CLI, with an LLM actor and verifier judging skill compliance.
 
 ## Plugin tests
 
 Live in `tests/`. Currently:
 
-- `tests/brainstorm-server/` — node test suite for the brainstorm server JS code.
 - `tests/opencode/` — bash tests for OpenCode plugin loading, bootstrap caching, and tool registration.
 - `tests/codex-plugin-sync/` — bash sync verification.
 - `tests/claude-code/test-helpers.sh`, `analyze-token-usage.py` — utilities used by remaining bash tests.
@@ -1184,15 +1183,6 @@ uv run drill run triggering-test-driven-development -b claude 2>&1 | tail -3
 ```
 
 Expected: `claude: 1 passed, 0 failed, 0 errors`. If FAIL, the docs / scrub / deletion phases broke something — bisect over the recent commits.
-
-- [ ] **Step 3: Run remaining plugin tests that survived**
-
-```bash
-cd /Users/jesse/Documents/GitHub/superpowers/superpowers/tests/brainstorm-server
-node server.test.js 2>&1 | tail -3
-```
-
-Expected: `Results: 25 passed, 0 failed`.
 
 ---
 
@@ -1368,7 +1358,6 @@ Expected: browser opens to the new PR. Take a screenshot or note the URL for fol
 - [ ] `cd evals && unset SUPERPOWERS_ROOT && uv run pytest` passes
 - [ ] `cd evals && unset SUPERPOWERS_ROOT && uv run drill list` returns scenarios
 - [ ] `cd evals && unset SUPERPOWERS_ROOT && uv run drill run triggering-test-driven-development -b claude` passes
-- [ ] `tests/brainstorm-server/server.test.js` still passes (regression gate for non-LLM tests)
 - [ ] `git diff dev..HEAD docs/superpowers/plans/2026-04-06-worktree-rototill.md docs/superpowers/plans/2026-03-23-codex-app-compatibility.md RELEASE-NOTES.md` shows annotations only, no path rewrites
 - [ ] `cd ../drill && git log --oneline -1` shows obra/drill is unchanged from the source SHA recorded in the lift commit
 - [ ] PR body lists the post-merge archival action item

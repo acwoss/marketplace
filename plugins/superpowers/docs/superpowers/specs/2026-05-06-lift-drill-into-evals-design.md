@@ -52,7 +52,6 @@ superpowers/
     tests/                            (drill's own pytest suite)
 
   tests/                              ← bash tests preserved by default
-    brainstorm-server/                ← KEEP (node tests for brainstorm-server JS code)
     opencode/                         ← KEEP (plugin loading tests)
     codex-plugin-sync/                ← KEEP (sync verification)
     claude-code/                      ← MOSTLY KEEP — see deletion gate
@@ -72,7 +71,7 @@ superpowers/
 
 The `tests/` and `evals/` directories serve clearly distinct roles after this PR:
 
-- **`tests/`** — does the plugin's non-LLM code work? Unit and integration tests for the brainstorm-server JS code, OpenCode plugin loading, codex-plugin-sync sync verification. Bash + node + python.
+- **`tests/`** — does the plugin's non-LLM code work? Unit and integration tests for OpenCode plugin loading, codex-plugin-sync sync verification. Bash + node + python.
 - **`evals/`** — do agents behave correctly on real LLM sessions? Drill scenarios with actor + verifier. Python-only, runs real tmux sessions.
 
 ## Deletion gate (per bash test)
