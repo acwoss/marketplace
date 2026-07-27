@@ -238,6 +238,7 @@ The Pi package loads the Superpowers skills and a small extension that injects t
 - **using-git-worktrees** - Parallel development branches
 - **finishing-a-development-branch** - Merge/PR decision workflow
 - **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)
+- **storytelling-commits** - Atomic Conventional Commits with What/Why/How bodies
 
 **Meta**
 - **writing-skills** - Create new skills following best practices (includes testing methodology)
