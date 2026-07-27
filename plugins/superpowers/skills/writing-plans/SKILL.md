@@ -13,6 +13,8 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
 
+**Prerequisite:** The SPEC should have passed `superpowers:critique` (blocking items resolved or explicitly deferred by the user). If critique was skipped, run it first — do not absorb unsettled SPEC decisions into the plan.
+
 **Context:** If working in an isolated worktree, it should have been created via the `superpowers:using-git-worktrees` skill at execution time.
 
 **Save plans to:** `.dev/plans/YYYY-MM-DD-<feature-name>.md`

@@ -27,8 +27,9 @@ You MUST create a task for each of these items and complete them in order:
 4. **Present design** — in sections scaled to their complexity, get user approval after each section
 5. **Write design doc** — save to `.dev/specs/YYYY-MM-DD-<topic>-design.md` and commit
 6. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-7. **User reviews written spec** — ask user to review the spec file before proceeding
-8. **Transition to implementation** — invoke writing-plans skill to create implementation plan
+7. **Critique** — invoke `superpowers:critique` to surface assumptions and open decisions; wait for user answers
+8. **User reviews written spec** — ask user to review the spec file before proceeding
+9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
 ## Process Flow
 
@@ -41,6 +42,7 @@ digraph brainstorming {
     "User approves design?" [shape=diamond];
     "Write design doc" [shape=box];
     "Spec self-review\n(fix inline)" [shape=box];
+    "Critique\n(user gate)" [shape=box];
     "User reviews spec?" [shape=diamond];
     "Invoke writing-plans skill" [shape=doublecircle];
 
@@ -51,13 +53,14 @@ digraph brainstorming {
     "User approves design?" -> "Present design sections" [label="no, revise"];
     "User approves design?" -> "Write design doc" [label="yes"];
     "Write design doc" -> "Spec self-review\n(fix inline)";
-    "Spec self-review\n(fix inline)" -> "User reviews spec?";
+    "Spec self-review\n(fix inline)" -> "Critique\n(user gate)";
+    "Critique\n(user gate)" -> "User reviews spec?";
     "User reviews spec?" -> "Write design doc" [label="changes requested"];
     "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
 }
 ```
 
-**The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
+**The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. After brainstorming you MUST run `superpowers:critique` before `writing-plans`.
 
 ## The Process
 
@@ -114,18 +117,21 @@ After writing the spec document, look at it with fresh eyes:
 1. **Placeholder scan:** Any "TBD", "TODO", incomplete sections, or vague requirements? Fix them.
 2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
 3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
-4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
+4. **Ambiguity check:** Could any requirement be interpreted two different ways? Mark product/ops ambiguities for `superpowers:critique` — do not silently pick those defaults here. Only resolve purely editorial wording inline.
 
 Fix any issues inline. No need to re-review — just fix and move on.
 
+**Critique gate (required):**
+After self-review, invoke `superpowers:critique` on the SPEC before asking for final approval or writing plans. Self-review tidies the document; critique surfaces hidden assumptions and unclear decisions that need the user's explicit answers. Do not start `writing-plans` until critique blocking items are resolved or explicitly deferred by the user.
+
 **User Review Gate:**
-After the spec review loop passes, ask the user to review the written spec before proceeding:
+After critique findings are addressed, ask the user to confirm the written spec before proceeding:
 
-> "Spec written and committed to `<path>`. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
+> "Spec written and committed to `<path>`. Critique items are resolved. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
 
-Wait for the user's response. If they request changes, make them and re-run the spec review loop. Only proceed once the user approves.
+Wait for the user's response. If they request changes, make them, re-run self-review + critique on the deltas, then continue. Only proceed once the user approves.
 
 **Implementation:**
 
 - Invoke the writing-plans skill to create a detailed implementation plan
-- Do NOT invoke any other skill. writing-plans is the next step.
+- Do NOT skip critique. writing-plans is the next step only after critique clears.
