@@ -26,6 +26,9 @@ e disponível apenas no marketplace Claude.
 
 ### Locais
 
+- **memory** — Memória permanente em markdown (fatos do projeto e evidências
+  de incidente), vault Obsidian-friendly, MCP 100% local.
+  Código em [`plugins/memory/`](plugins/memory/).
 - **superpowers** — Biblioteca de skills (TDD, debugging, colaboração e
   workflows). Baseado em [obra/superpowers](https://github.com/obra/superpowers).
   Código em [`plugins/superpowers/`](plugins/superpowers/).
@@ -37,6 +40,7 @@ e disponível apenas no marketplace Claude.
 ```shell
 /plugin marketplace add acwoss/marketplace
 /plugin install memory-mcp@acwoss
+/plugin install memory@acwoss
 /plugin install superpowers@acwoss
 /reload-plugins
 ```

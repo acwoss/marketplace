@@ -9,6 +9,11 @@
   },
   "plugins": [
     {
+      "name": "memory",
+      "source": "memory",
+      "description": "Permanent markdown memory for AI agents: project facts and incident evidence in an Obsidian-friendly vault"
+    },
+    {
       "name": "superpowers",
       "source": "superpowers",
       "description": "Core skills library: TDD, debugging, collaboration patterns, and proven techniques"

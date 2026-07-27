@@ -1,0 +1,13 @@
+---
+description: Bootstrap markdown memory — recall early, persist durable decisions and incident evidence
+alwaysApply: true
+---
+
+# Memory bootstrap
+
+When `MEMORY_VAULT_PATH` is configured and the memory MCP is available:
+
+1. If the project and/or Jira ticket are clear at the start of work, call `memory_status` and then `memory_list` or `memory_search` for relevant notes before inventing context.
+2. When a durable decision, preference, or project fact is established, persist it with `memory_upsert` (`type`: `decision` | `preference` | `fact`).
+3. When an incident/behavior analysis yields empirical findings (New Relic, AWS, logs), persist a short evidence note (`type: evidence`) with optional `jira` and truncated snippets — not full dumps or secrets.
+4. Prefer memory MCP tools over ad-hoc file edits outside the vault contract.

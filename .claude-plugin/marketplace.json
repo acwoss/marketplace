@@ -17,6 +17,11 @@
       }
     },
     {
+      "name": "memory",
+      "description": "Permanent markdown memory for AI agents: project facts and incident evidence in an Obsidian-friendly vault",
+      "source": "memory"
+    },
+    {
       "name": "superpowers",
       "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
       "source": "superpowers"

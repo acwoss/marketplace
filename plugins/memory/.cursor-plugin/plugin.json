@@ -1,0 +1,29 @@
+{
+  "name": "memory",
+  "displayName": "Memory",
+  "description": "Permanent markdown memory for AI agents: project facts and incident evidence in an Obsidian-friendly vault",
+  "version": "1.0.0",
+  "author": {
+    "name": "Anderson Carlos Woss"
+  },
+  "license": "MIT",
+  "keywords": [
+    "memory",
+    "markdown",
+    "obsidian",
+    "mcp",
+    "facts",
+    "evidence"
+  ],
+  "variables": {
+    "type": "object",
+    "properties": {
+      "MEMORY_VAULT_PATH": {
+        "type": "string",
+        "title": "Memory vault path",
+        "description": "Absolute path to the global markdown memory vault (Obsidian-compatible folder)"
+      }
+    },
+    "required": ["MEMORY_VAULT_PATH"]
+  }
+}
