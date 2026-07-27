@@ -6,7 +6,10 @@ description: Initialize the markdown memory vault and verify the memory MCP
 # Initialize memory vault
 
 1. Choose a global vault directory (often an Obsidian vault folder), e.g. `~/Obsidian/AI-Memory`.
-2. Set the plugin variable **MEMORY_VAULT_PATH** to that absolute path (Cursor: Plugins → Configure; or export the env var for local MCP runs).
+2. Set **MEMORY_VAULT_PATH**:
+   - Windows user env (recommended): `D:\Projetos\AI-Memory`
+   - And/or Cursor: Plugins → memory → Configure
+   - Ensure a junction exists: `~/.cursor/plugins/local/memory` → this plugin folder (required for MCP path resolution)
 3. Ensure the memory MCP server is built:
    - From `plugins/memory/server`: `npm install && npm run build`
 4. Call `memory_status` via the memory MCP.
